@@ -6,14 +6,55 @@ class Main extends Component {
     constructor(props){
         super(props)
 
-        const params = this.getHashParams();
-        const token = params.access_token;
+        var client_secret = {
+            YoutubeLoggedIn: false,
+            YoutubeAccessToken: '',
+            SpotifyloggedIn: false,
+            SpotifyAcessToken: ''
+        }
+
+        var params  = this.getHashParams()
+        if (params.scope && params.access_token && params.expires_in){
+            var YoutubeToken = params.access_token
+        }
+        if (params.access_token && params.refresh_token) {
+            var SpotifyToken = params.access_token
+        }
+
+        // var YoutubeToken = ''
+        // var SpotifyToken = ''
+
+        // if (!YoutubeToken){
+        //     // console.log('Youtube Not Logged In')
+        //     const YoutubeParams = this.getHashParams();
+        //     // console.log('Getting Youtube Params ...')
+        //     // console.log(YoutubeParams)
+        //     if (Object.keys(YoutubeParams).length !== 0){
+        //         // console.log('Found Youtube Params')
+        //         YoutubeToken = YoutubeParams.access_token;
+        //         // console.log('Getting youtube access token from params ...')
+        //         // console.log(YoutubeToken)
+        //     }
+        // } else {
+        //     console.log('Youtube is Logged In')
+        //     const SpotifyParams = this.getHashParams();
+        //     if (Object.keys(SpotifyParams).length !== 0){
+        //         if(SpotifyParams.access_token != YoutubeToken){
+        //             SpotifyToken = SpotifyParams.access_token;
+        //         }
+        //     }
+        // }
 
         this.state = {
-            loggedIn: token ? true : false,
-            access_token: token
+            YoutubeLoggedIn : YoutubeToken ? true:false,
+            SpotifyloggedIn: SpotifyToken ? true: false,
+            YoutubeAccessToken : YoutubeToken,
+            SpotifyAcessToken: SpotifyToken
         }
-    }
+        
+        console.log(this.state)
+    };
+
 
     getHashParams() {
         var hashParams = {};
@@ -27,11 +68,10 @@ class Main extends Component {
         return hashParams;
     }
 
-
     render(){
         return(
             <>
-            {this.state.loggedIn ? <Profile token = {this.state.access_token}/> : <Login/>}
+            {this.state.SpotifyloggedIn ? <Profile SpotifyToken = {this.state.SpotifyAcessToken} YoutubeToken = {this.state.YoutubeAccessToken} /> : <Login YoutubeToken = {this.state.YoutubeAccessToken}/>}
             </>
         )
     }
